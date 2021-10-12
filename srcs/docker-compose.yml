@@ -1,0 +1,55 @@
+version: "3.9"
+services:
+  nginx:
+    build: ./requirements/nginx/
+    ports:
+      - "443:443"
+    volumes:
+      - wp-site:/www/wordpress
+    networks:
+      - backend
+    depends_on:
+      - wordpress
+
+  mariadb:
+    build: ./requirements/mariadb/
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - backend
+
+  wordpress:
+    build: requirements/wordpress/
+    volumes:
+      - wp-site:/www/wordpress
+    networks:
+      - backend
+    depends_on:
+      - mariadb
+
+  adminer:
+    build: requirements/bonus/adminer/
+    ports:
+      - "5000:5000"
+    networks:
+      - backend
+    depends_on:
+      - mariadb
+
+volumes:
+  db:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/dolphin/db
+      o: bind
+
+  wp-site:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/dolphin/wp-site
+      o: bind
+networks:
+  backend:
+    driver: bridge
