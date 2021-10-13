@@ -2,6 +2,7 @@ version: "3.9"
 services:
   nginx:
     build: ./requirements/nginx/
+    image: nginx
     ports:
       - "443:443"
     volumes:
@@ -13,13 +14,17 @@ services:
 
   mariadb:
     build: ./requirements/mariadb/
+    image: mariadb
     volumes:
       - db:/var/lib/mysql
     networks:
       - backend
+    envirenment:
+      - .env
 
   wordpress:
     build: requirements/wordpress/
+    image: wordpress
     volumes:
       - wp-site:/www/wordpress
     networks:
@@ -29,6 +34,7 @@ services:
 
   adminer:
     build: requirements/bonus/adminer/
+    image: adminer
     ports:
       - "5000:5000"
     networks:
