@@ -1,6 +1,7 @@
 version: "3.9"
 services:
   nginx:
+    restart: unless-stopped
     build: ./requirements/nginx/
     image: nginx
     ports:
@@ -13,6 +14,7 @@ services:
       - wordpress
 
   mariadb:
+    restart: unless-stopped
     build: ./requirements/mariadb/
     image: mariadb
     volumes:
@@ -23,6 +25,7 @@ services:
       - .env
 
   wordpress:
+    restart: unless-stopped
     build: requirements/wordpress/
     image: wordpress
     volumes:
@@ -36,6 +39,7 @@ services:
       - .env
 
   adminer:
+    restart: unless-stopped
     build: requirements/bonus/adminer/
     image: adminer
     ports:
@@ -46,12 +50,14 @@ services:
       - mariadb
 
   redis:
+    restart: unless-stopped
     build: requirements/bonus/redis/
     image: redis
     networks:
       - backend
 
   ftp:
+    restart: unless-stopped
     build: requirements/bonus/ftp/
     image: ftp
     networks:
@@ -63,6 +69,7 @@ services:
       - wp-site:/home/admin/
 
   site:
+    restart: unless-stopped
     build: requirements/bonus/site/
     image: site
     networks:
@@ -71,6 +78,7 @@ services:
       - "9000:9000"
 
   backup:
+    restart: unless-stopped
     build: requirements/bonus/backup/
     image: backup
     networks:
