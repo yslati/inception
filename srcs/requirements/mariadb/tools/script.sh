@@ -6,9 +6,9 @@ then
         echo "CREATE DATABASE wordpress;" | mysql -u root
         echo "GRANT ALL PRIVILEGES on *.* to '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';" | mysql -u root
         echo "FLUSH PRIVILEGES;" | mysql -u root
-        mysql -u root < wp.sql
-        echo "ALTER USER 'root'@'loaclhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}'" | mysql -u root
+        echo "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}'" | mysql -u root
         echo "FLUSH PRIVILEGES;" | mysql -u root
+	mysql --user="root" --database="wordpress" --password="${MYSQL_ROOT_PASSWORD}" < /wp.sql
 
 fi
 sed -i 's/skip-networking/# skip-networking/g' /etc/my.cnf.d/mariadb-server.cnf

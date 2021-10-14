@@ -13,11 +13,15 @@ RUN apk add php7-gd php7-mysqli php7-zlib php7-curl php7-redis
 
 RUN mkdir -p /www
 RUN wget http://wordpress.org/latest.tar.gz && tar -xzvf latest.tar.gz 
-RUN rm -rf latest.tar.gz && mv -Rf wordpress /www/wordpress
+RUN rm -rf latest.tar.gz
+RUN cp -Rf wordpress /www/
 
 COPY ./conf/wp-config.php /www/wordpress/
 COPY ./tools/setup.sh .
 RUN chmod +x setup.sh
+
+RUN wget https://downloads.wordpress.org/plugin/redis-cache.2.0.21.zip && unzip redis-cache.2.0.21.zip
+RUN cp -Rf redis-cache /www/wordpress/wp-content/plugins/
 
 RUN sed -i 's/listen = 127.0.0.1:9000/listen = 0.0.0.0:9000/' /etc/php7/php-fpm.d/www.conf
 RUN sed -i 's/user = nobody/user = root/g'  /etc/php7/php-fpm.d/www.conf

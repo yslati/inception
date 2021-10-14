@@ -19,7 +19,7 @@ services:
       - db:/var/lib/mysql
     networks:
       - backend
-    envirenment:
+    env_file:
       - .env
 
   wordpress:
@@ -31,6 +31,9 @@ services:
       - backend
     depends_on:
       - mariadb
+      - redis
+    env_file:
+      - .env
 
   adminer:
     build: requirements/bonus/adminer/
@@ -42,20 +45,64 @@ services:
     depends_on:
       - mariadb
 
+  redis:
+    build: requirements/bonus/redis/
+    image: redis
+    networks:
+      - backend
+
+  ftp:
+    build: requirements/bonus/ftp/
+    image: ftp
+    networks:
+      - backend
+    ports:
+      - "21:21"
+      - "21000:21000"
+    volumes:
+      - wp-site:/home/admin/
+
+  site:
+    build: requirements/bonus/site/
+    image: site
+    networks:
+      - backend
+    ports:
+      - "9000:9000"
+
+  backup:
+    build: requirements/bonus/backup/
+    image: backup
+    networks:
+      - backend
+    depends_on:
+      - mariadb
+    volumes:
+      - wp-site:/db
+      - backup:/backup
+
 volumes:
   db:
     driver: local
     driver_opts:
       type: none
-      device: /home/dolphin/db
+      device: /home/dolphin/data/db
       o: bind
 
   wp-site:
     driver: local
     driver_opts:
       type: none
-      device: /home/dolphin/wp-site
+      device: /home/dolphin/data/wp-site
       o: bind
+
+  backup:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/dolphin/data/backup
+      o: bind
+
 networks:
   backend:
     driver: bridge

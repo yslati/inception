@@ -18,15 +18,29 @@
  * @package WordPress
  */
 
+//////////////////////////////////////////////////
+
+define( 'WP_REDIS_HOST', 'redis' );
+define( 'WP_REDIS_PORT', 6379 );
+// define( 'WP_REDIS_PASSWORD', 'secret' );
+define( 'WP_REDIS_TIMEOUT', 1 );
+define( 'WP_REDIS_READ_TIMEOUT', 1 );
+
+// change the database for each site to avoid cache collisions
+define( 'WP_REDIS_DATABASE', 0 );
+
+///////////////////////////////////////////////////
+
+
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
 define( 'DB_NAME', 'wordpress' );
 
 /** MySQL database username */
-define( 'DB_USER', 'admin' );
+define( 'DB_USER', '__WP_USER__' );
 
 /** MySQL database password */
-define( 'DB_PASSWORD', 'admin' );
+define( 'DB_PASSWORD', '__WP_PASS__' );
 
 /** MySQL hostname */
 define( 'DB_HOST', 'mariadb' );
