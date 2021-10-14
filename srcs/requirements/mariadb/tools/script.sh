@@ -2,10 +2,17 @@ if [ ! -f "/var/lib/mysql/ib_buffer_pool" ];
 then
         /etc/init.d/mariadb setup &>/dev/null
         rc-service mariadb start &>/dev/null
+
+        echo "CREATE USER '${MYSQL_USER}'@'localhost' IDENTIFIED BY '${MYSQL_PASSWORD}';" | mysql -u root
+        echo "CREATE DATABASE wordpress;" | mysql -u root
+        echo "GRANT ALL PRIVILEGES on *.* to '${MYSQL_USER}'@'localhost' IDENTIFIED BY '${MYSQL_PASSWORD}';" | mysql -u root
+        echo "FLUSH PRIVILEGES;" | mysql -u root
+
         echo "CREATE USER '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';" | mysql -u root
         echo "CREATE DATABASE wordpress;" | mysql -u root
         echo "GRANT ALL PRIVILEGES on *.* to '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';" | mysql -u root
         echo "FLUSH PRIVILEGES;" | mysql -u root
+
         echo "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}'" | mysql -u root
         echo "FLUSH PRIVILEGES;" | mysql -u root
 	mysql --user="root" --database="wordpress" --password="${MYSQL_ROOT_PASSWORD}" < /wp.sql
