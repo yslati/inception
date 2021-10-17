@@ -94,21 +94,21 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/dolphin/data/db
+      device: /home/yslati/data/db
       o: bind
 
   wp-site:
     driver: local
     driver_opts:
       type: none
-      device: /home/dolphin/data/wp-site
+      device: /home/yslati/data/wp-site
       o: bind
 
   backup:
     driver: local
     driver_opts:
       type: none
-      device: /home/dolphin/data/backup
+      device: /home/yslati/data/backup
       o: bind
 
 networks:
